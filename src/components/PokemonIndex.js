@@ -16,13 +16,12 @@ class PokemonPage extends React.Component {
     // results: []
   };
 
-  handleSearchChangeChild = () => {console.log("not yet defined")}
+  handleSearchChangeChild = () => {console.log("not yet defined at this point in program")}
+  newPokeHandlerChild = () => {console.log("not yet defined at this point in program")}
 
   queryPoke = async () => {
     const response = await fetch(POKEMON_URL);
-    // console.log(response);
     const parsed = await response.json();
-    // console.log(parsed);
     return parsed;
   }
 
@@ -48,17 +47,14 @@ class PokemonPage extends React.Component {
     });
   }
 
-  // handleSearchChange = (event, searchChange) => {
-    
-  // }
-
   render() {
     return (
       <div>
         <h1>Pokemon Searcher</h1>
         <br />
         <Search 
-          onSearchChange={_.debounce(this.handleSearchChangeChild, 1000)}
+          // onSearchChange={_.debounce(this.handleSearchChangeChild, 100)}
+          onSearchChange={this.handleSearchChangeChild}
           showNoResults={false}
           loading={this.state.isLoading}
           // results={this.state.results}
