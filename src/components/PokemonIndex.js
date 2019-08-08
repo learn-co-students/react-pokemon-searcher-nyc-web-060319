@@ -13,8 +13,10 @@ class PokemonPage extends React.Component {
     pokemon: [],
     value: '',
     isLoading: false,
-    results: []
+    // results: []
   };
+
+  handleSearchChangeChild = () => {console.log("not yet defined")}
 
   queryPoke = async () => {
     const response = await fetch(POKEMON_URL);
@@ -26,36 +28,29 @@ class PokemonPage extends React.Component {
 
   componentDidMount = async () => {
     const pokemon = await this.queryPoke();
-    this.setState({pokemon});
-
+    const processedPokemon = pokemon.map( poke => Object.assign({}, {show: true}, poke));
+    this.setState({pokemon: processedPokemon});
+    this.newPokeHandlerChild(processedPokemon);
   }
 
-  // setSearchHandler = 
+  setSearchHandler = (searchHandler) => {
+    this.handleSearchChangeChild = searchHandler;
+  }
 
-  handleSearchChange = (event, searchChange) => {
-    
+  setNewPokeHandler = (newPokeHandler) => {
+    this.newPokeHandlerChild = newPokeHandler;
+  }
+
+  setLoadingAndValue = (loadingValue, searchChangeValue) => {
     this.setState({
-      isLoading: true,
-      value: searchChange.value
-    })
-    console.log(searchChange.value);
-
-    setTimeout(() => {
-      if (this.state.value.length < 1) {
-        this.setState(INITIAL_STATE);
-        return;
-      }
-      // https://react.semantic-ui.com/modules/search/#types-standard
-      // semantic recommends using a regex.
-      const re = new RegExp(_.escapeRegExp(this.state.value), 'i')
-      const isMatch = pokemon => re.test(pokemon.name)
-  
-      this.setState({
-        isLoading: false,
-        results: _.filter(this.state.pokemon, isMatch),
-      })  
-    }, 500);
+      isLoading: loadingValue,
+      value: searchChangeValue
+    });
   }
+
+  // handleSearchChange = (event, searchChange) => {
+    
+  // }
 
   render() {
     return (
@@ -63,14 +58,22 @@ class PokemonPage extends React.Component {
         <h1>Pokemon Searcher</h1>
         <br />
         <Search 
-          onSearchChange={_.debounce(this.handleSearchChange, 1000)}
+          onSearchChange={_.debounce(this.handleSearchChangeChild, 1000)}
           showNoResults={false}
           loading={this.state.isLoading}
           // results={this.state.results}
           // value={this.state.value} 
           />
         <br />
-        <PokemonCollection pokemon={(this.state.results.length > 0) ? this.state.results : this.state.pokemon}/>
+        <PokemonCollection 
+        // pokemon={(this.state.results.length > 0) ?
+        // this.state.results
+        // : this.state.pokemon}
+        pokemon={this.state.pokemon}
+        setSearchHandler={this.setSearchHandler}
+        setLoadingAndValue={this.setLoadingAndValue}
+        setNewPokeHandler={this.setNewPokeHandler}
+        />
         <br />
         <PokemonForm />
       </div>
