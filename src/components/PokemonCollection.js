@@ -9,10 +9,10 @@ class PokemonCollection extends React.Component {
   componentDidMount = () => {
     this.props.setSearchHandler(this.handleSearchChange);
     this.props.setNewPokeHandler(this.newPoke);
+    this.props.setAddPokeHandler(this.addPoke);
     // this.props.setLoadingAndValue(this.resetLoading);
   }
   cards = (pokemon) => {
-    // console.log(pokemon)
     return pokemon.map(poke => (poke.show ?
       <PokemonCard key={`pokemon-${poke.id}`} pokemon={poke}/>
       : null));
@@ -20,6 +20,12 @@ class PokemonCollection extends React.Component {
 
   newPoke = (pokemon) => {
     this.setState({pokemon})
+  }
+
+  addPoke = (newPoke) => {
+    const oldPokes = [...this.state.pokemon];
+    oldPokes.push(newPoke);
+    this.newPoke(oldPokes);
   }
 
   searchChangeTimeoutLoadingInternal = (searchChange) => {
@@ -50,17 +56,12 @@ class PokemonCollection extends React.Component {
     this.setState({pokemon: newPoke});
 
     this.props.setLoadingAndValue(false, searchChange.value);
-    // this.setState({
-    //   isLoading: ,
-    //   results: _.filter(this.state.pokemon, isMatch),
-    // })
-
   }
 
   handleSearchChange = (event, searchChange) => {
     this.props.setLoadingAndValue(true, searchChange.value)
     console.log(searchChange.value);
-    setTimeout(() => {this.searchChangeTimeoutLoadingInternal(searchChange)}, 100);
+    setTimeout(() => {this.searchChangeTimeoutLoadingInternal(searchChange)}, 0);
 
   }
 

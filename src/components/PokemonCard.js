@@ -14,6 +14,7 @@ class PokemonCard extends React.Component {
 
   src = () => {
     if (this.state.front) {
+      // console.log(this.props.pokemon);
       return this.props.pokemon.sprites.front;
     }
     return this.props.pokemon.sprites.back;
